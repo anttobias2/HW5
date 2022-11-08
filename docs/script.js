@@ -93,6 +93,7 @@ var color2 = "white";
                                 score++;
                                 if (checkWinState()) {
                                     //TODO: draw message on the canvas
+                                    drawWinMessage();
                                     pause = true;
                                     
                                 }
@@ -171,6 +172,7 @@ var color2 = "white";
                         lives--;
                         if (lives <= 0) {
                             pause = true;
+                            drawLossMessage();
                         }
                         else {
                             x = canvas.width / 2;
@@ -231,7 +233,7 @@ var color2 = "white";
             //draw the menu screen, including labels and button
             function drawMenu() {
 
-
+                
                 //draw the rectangle menu backdrop
                 ctx.beginPath();
                 let width = canvas.width - menuPos*2;
@@ -261,12 +263,12 @@ var color2 = "white";
                 //event listener for clicking start
                 //need to add it here because the menu should be able to come back after 
                 //we remove the it later          
+                drawWinMessage();
                 canvas.addEventListener("click", startGameClick); 
             }
 
             //function used to set shadow properties
             function setShadow() {
-
             };
 
             //function used to reset shadow properties to 'normal'
@@ -323,7 +325,7 @@ var color2 = "white";
             //if we win, we want to accumulate high score and draw a message to the canvas
             //if we lose, we want to draw a losing message to the canvas
             function checkWinState() {
-                if (score == brickRowCount * brickColumnCount){
+                if (score % (brickRowCount * brickColumnCount) == 0){
                     return true;
                 }
                 else {
@@ -333,14 +335,34 @@ var color2 = "white";
 
             //function to clear the board state and start a new game (no high score accumulation)
             function startNewGame(resetScore) {
-                clearMenu();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 resetBoard();
             };
 
             //function to reset the board and continue playing (accumulate high score)
             //should make sure we didn't lose before accumulating high score
             function continuePlaying() {
-
+                if (checkWinState() && lives > 0){
+                    for (var c = 0; c < brickColumnCount; c++) {
+                        bricks[c] = [];
+                        for (var r = 0; r < brickRowCount; r++) {
+                            bricks[c][r] = { x: 0, y: 0, status: 1 };
+                        }
+                    }
+                    x = canvas.width / 2;
+                    y = canvas.height - 30;
+                    dx = 3;
+                    dy = -3;
+                    paddleX = (canvas.width - paddleWidth) / 2;  
+                    lives = 3;
+                    
+                    if (pause == true){
+                        togglePauseGame();
+                    }
+                }
+                else{
+                    resetBoard();
+                }
             };
 
             //function to reset starting game info
@@ -348,16 +370,40 @@ var color2 = "white";
                 //reset paddle position
                 //reset bricks               
                 //reset score and lives 
+                for (var c = 0; c < brickColumnCount; c++) {
+                    bricks[c] = [];
+                    for (var r = 0; r < brickRowCount; r++) {
+                        bricks[c][r] = { x: 0, y: 0, status: 1 };
+                    }
+                }
                 x = canvas.width / 2;
                 y = canvas.height - 30;
                 dx = 3;
                 dy = -3;
                 paddleX = (canvas.width - paddleWidth) / 2;  
-                drawBricks();            
+                highScore = 0;
+                score = 0;
+                lives = 3;
+
+                if (pause == true){
+                    togglePauseGame();
+                }
             };
 
             function reloadWindow(){
                 document.location.reload();
+            }
+
+            function drawWinMessage(){
+                ctx.font = "40px Arial";
+                ctx.fillStyle = color2;
+                ctx.fillText("You Win! Congrats!", 60, 130);
+            }
+
+            function drawLossMessage(){
+                ctx.font = "40px Arial";
+                ctx.fillStyle = color2;
+                ctx.fillText("Sorry! Game Over!", 70, 130);
             }
 
             //draw the menu.

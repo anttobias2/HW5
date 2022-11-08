@@ -1,1 +1,38 @@
+<!--
+    HW5 Starter Code
+    Modified from https://github.com/end3r/Gamedev-Canvas-workshop
+-->
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="utf-8" />
+    <title>HW5</title>
+    <script src="script.js"></script>
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <canvas id="myCanvas" width="480" height="320"></canvas>
+    <fieldset>
+        <legend>Options</legend>
+        <div>
+            <button id="pause">Toggle Pause Game</button>
+        </div>
+        <div>
+            <label for="ballSpeed">
+                Ball Speed: <b id="speedVal">1</b>
+            </label>
+            <input id="ballSpeed" type="range" min="1" max="3" step="0.05" value="1">
+        </div>
+        <div class="newGame">
+            <button id="newGame">New Game (Reset)</button>
+            <button id="continue">Continue Playing</button>
+        </div>
+        <div>
+            <button id="reload">Reload Window</button>
+        </div>
+    </fieldset>
+</body>
+
+</html>
